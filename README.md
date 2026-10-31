@@ -1,4 +1,5 @@
 # Team 17Hump
 
-Sabrina Zheng (slz44)
-Dhikshika Cherivirala (drc275)
+Sabrina Zheng (slz44)\
+Dhikshika Cherivirala (drc275)\
+Shreyaa Sanjay (ss4457)
