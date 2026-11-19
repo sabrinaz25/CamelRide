@@ -1,0 +1,11 @@
+lib: [
+  "_build/install/default/lib/camelride/META"
+  "_build/install/default/lib/camelride/dune-package"
+  "_build/install/default/lib/camelride/opam"
+]
+bin: [
+  "_build/install/default/bin/camelride"
+]
+doc: [
+  "_build/install/default/doc/camelride/README.md"
+]
