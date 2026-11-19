@@ -1,4 +1,4 @@
 (executable
  (public_name camelride)
  (name main)
- (libraries camelride))
+ (libraries camelride raylib))
