@@ -1,4 +1,4 @@
-open Graphics
+open Raylib
 
 (* Window dimensions — change these to resize the window *)
 let screen_width = 1000
@@ -7,37 +7,28 @@ let screen_height = 640
 (* Draw one frame. Right now it just clears the screen to a solid color.
    Add your own drawing here later. *)
 let draw () =
-  set_color (rgb 255 255 255);
-  fill_rect 0 0 screen_width screen_height;
-  synchronize ()
+  begin_drawing ();
+  clear_background Color.white;
+  end_drawing ()
 
 let () =
   (* Open the window *)
-  open_graph (Printf.sprintf " %dx%d" screen_width screen_height);
-  set_window_title "CamelRide";
-  auto_synchronize false; (* we call synchronize () ourselves each frame *)
+  init_window screen_width screen_height "CamelRide";
+  set_target_fps 60;
+  (* raylib caps the loop at 60 fps for us *)
   Random.self_init ();
 
-  let running = ref true in
-  let last_frame = ref (Unix.gettimeofday ()) in
-  try
-    while !running do
-      let now = Unix.gettimeofday () in
-      let dt = min 0.05 (now -. !last_frame) in
-      last_frame := now;
-      ignore dt; (* frame time in seconds, handy for game logic later *)
+  (* Loop until the close button, Esc, or Q is pressed. window_should_close
+     covers the close button and Esc *)
+  while not (window_should_close () || is_key_pressed Key.Q) do
+    (* frame time in seconds, handy for game logic later *)
+    let dt = Float.min 0.05 (get_frame_time ()) in
+    ignore dt;
 
-      (* Input: press Q to quit. Add more key handling here later. *)
-      if key_pressed () then (
-        let key = read_key () in
-        if key = 'q' || key = 'Q' then running := false);
+    (* Input: is_key_down is true for every frame a key is held, which is what
+       jetpack thrust needs. Add more key handling here later. *)
+    ignore (is_key_down Key.Space);
 
-      draw ();
-
-      (* Cap the loop at roughly 60 fps *)
-      Unix.sleepf (max 0. (0.016 -. (Unix.gettimeofday () -. now)))
-    done;
-    close_graph ()
-  with
-  | Graphic_failure message when message = "graphic screen not opened" ->
-      prerr_endline "The window was closed; exiting."
+    draw ()
+  done;
+  close_window ()
