@@ -1,9 +1,17 @@
+(** The direction a beam points. [Diagonal_up] rises from left to right, and
+    [Diagonal_down] falls from left to right. *)
+type orientation =
+  | Vertical
+  | Horizontal
+  | Diagonal_up
+  | Diagonal_down
+
 (** A new obstacle for [Obstacles] to create at the right edge of the screen. *)
 type spawn =
   | Beam of {
       y : float;  (** lowest point of the beam *)
-      length : float;
-      vertical : bool;
+      length : float;  (** length along the beam, including diagonals *)
+      orientation : orientation;
     }
   | Missile of { y : float  (** height the warning first appears at *) }
 
