@@ -1,4 +1,0 @@
-(lang dune 3.24)
-(name camelride)
-(sections (lib .) (bin ../../bin) (doc ../../doc/camelride))
-(files (lib (META dune-package opam)) (bin (camelride)) (doc (README.md)))
