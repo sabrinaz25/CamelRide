@@ -1,12 +1,6 @@
-(** The physics of Carrey the Camel's vertical movement.
-
-    Each frame, gravity pulls the camel down and, while the player holds the
+(** Each frame, gravity pulls the camel down and, while the player holds the
     thrust key, the jetpack pushes the camel up. The camel keeps its momentum
     between frames and cannot leave the play area.
-
-    This module does not read the keyboard or draw anything. The game loop
-    decides whether thrust is held, passes that in, and draws the camel using x
-    and y coordinates. This keeps the physics testable without opening a window.
 
     Coordinates follow raylib's screen convention: [(0, 0)] is the top-left
     corner of the window and y increases downward. So a positive velocity means
