@@ -30,7 +30,7 @@ val draw_obstacle : Obstacles.t -> unit
       hurt the camel yet. *)
 
 val draw_stats : distance:float -> speed:float -> unit
-(** [draw_hud ~distance ~speed] draws the current distance and speed as black
+(** [draw_stats ~distance ~speed] draws the current distance and speed as black
     text near the top of the window. *)
 
 val present : unit -> unit
