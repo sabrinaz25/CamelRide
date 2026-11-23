@@ -72,7 +72,7 @@ let update ~thrusting ~dt game =
         Obstacles.update_all
           game.obstacle_list
           ~speed:(World.speed new_world)
-          ~target_y:(Player.y new_player)
+          ~target_y:(Player.y new_player +. (Player.height /. 2.))
           ~dt
       in
 

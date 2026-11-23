@@ -9,7 +9,7 @@ type orientation =
 (** A new obstacle for [Obstacles] to create at the right edge of the screen. *)
 type spawn =
   | Beam of {
-      y : float;  (** lowest point of the beam *)
+      y : float;  (** highest point of the beam *)
       length : float;  (** length along the beam, including diagonals *)
       orientation : orientation;
     }
