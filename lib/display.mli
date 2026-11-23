@@ -1,4 +1,4 @@
-(** Drawing the game on screen with the OCaml [Graphics] library.
+(** Drawing the game on screen with the OCaml [Raylib] library.
 
     This first version is intentionally plain with a white background, solid black
     shapes, and black text with no colors or art while the rest of the game is being 
