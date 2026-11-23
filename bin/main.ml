@@ -1,34 +1,74 @@
+open Camelride
 open Raylib
 
-(* Window dimensions — change these to resize the window *)
-let screen_width = 1000
-let screen_height = 640
+let main () =
+  (* Initialize the display window. *)
+  Display.init ();
 
-(* Draw one frame. Right now it just clears the screen to a solid color.
-   Add your own drawing here later. *)
-let draw () =
-  begin_drawing ();
-  clear_background Color.white;
-  end_drawing ()
-
-let () =
-  (* Open the window *)
-  init_window screen_width screen_height "CamelRide";
-  set_target_fps 60;
-  (* raylib caps the loop at 60 fps for us *)
+  (* Initialize random seed and game state. *)
   Random.self_init ();
+  let game = Game.init ~seed:(Random.bits ()) in
 
-  (* Loop until the close button, Esc, or Q is pressed. window_should_close
-     covers the close button and Esc *)
-  while not (window_should_close () || is_key_pressed Key.Q) do
-    (* frame time in seconds, handy for game logic later *)
-    let dt = Float.min 0.05 (get_frame_time ()) in
-    ignore dt;
+  (* Main game loop. *)
+  let rec game_loop game =
+    if not (window_should_close () || is_key_pressed Key.Q) then begin
 
-    (* Input: is_key_down is true for every frame a key is held, which is what
-       jetpack thrust needs. Add more key handling here later. *)
-    ignore (is_key_down Key.Space);
+      (* Get elapsed time since the previous frame. *)
+      let dt = Float.min 0.05 (get_frame_time ()) in
 
-    draw ()
-  done;
-  close_window ()
+      (* Read jetpack input. *)
+      let thrusting = is_key_down Key.Space in
+
+      (* Update or restart the game. *)
+      let updated_game =
+        match Game.status game with
+        | Game.Running ->
+            Game.update ~thrusting ~dt game
+
+        | Game.Game_over ->
+            if is_key_pressed Key.R then
+              Game.restart ~seed:(Random.bits ()) game
+            else
+              game
+      in
+
+      (* Start drawing this frame. *)
+      Display.clear ();
+
+      (* Draw player. *)
+      Display.draw_player (Game.player updated_game);
+
+      (* Draw all active obstacles. *)
+      List.iter
+        Display.draw_obstacle
+        (Game.obstacles updated_game);
+
+      (* Draw distance and speed. *)
+      let current_world = Game.world updated_game in
+
+      Display.draw_stats
+        ~distance:(World.distance current_world)
+        ~speed:(World.speed current_world);
+
+      (* Draw game-over message. *)
+      (match Game.status updated_game with
+       | Game.Running -> ()
+       | Game.Game_over ->
+           draw_text
+             "GAME OVER - Press R to restart"
+             250 300 25 Color.red);
+
+      (* Finish drawing. *)
+      Display.present ();
+
+      (* Continue to the next frame. *)
+      game_loop updated_game
+    end
+  in
+
+  game_loop game;
+
+  (* Close window when exiting. *)
+  Display.close ()
+
+let () = main ()
